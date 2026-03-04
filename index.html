@@ -191,7 +191,7 @@
   lucide.createIcons();
 
   /***** CONFIG *****/
-  const CONFIG = { defaultInternal: "IP2" };
+  const CONFIG = { defaultInternal: "IP1" };
   const SHEETS = {
     IP1: { id: "1Vp-R0dA9gwccZIW6bNl0eLDjtGa_v-keUaNgcV5Wa74", name: "NPRCET_2024-2028_S4_IP1_RewardsSplit" },
     IP2: { id: "1iFdUps38F_cibF2r6chg3v9yPY-ByXKbuOtZ3WUenWc", name: "RewardPoints_All_2ndYears_IP2NPR" }
@@ -314,7 +314,7 @@
   };
   const maxMap = { "Theory": 8, "Lab+Theory": 10, "Lab": 10 };
 
-  let activeInternal = CONFIG.defaultInternal || "IP2";
+  let activeInternal = CONFIG.defaultInternal || "IP1";
   let students = [], headers = [], headerMap = {};
 
   // state & DOM refs
@@ -885,7 +885,7 @@ async function loadInternalMarksForStudent(internalKey, department, registerNo, 
   nextPageBtn.addEventListener("click", function(){ const totalPages = Math.max(1, Math.ceil(currentActivityRows.length / pageSize)); if (currentPage < totalPages) { currentPage++; renderActivityTable(currentActivityRows); }});
 
   (async function init(){
-    internalSelect.value = CONFIG.defaultInternal || "IP2";
+    internalSelect.value = CONFIG.defaultInternal || "IP1";
     activeInternal = internalSelect.value || "IP1";
     pageSize = Number(pageSizeSelect.value) || 10;
     const ok = await loadSheet(activeInternal);
@@ -896,3 +896,4 @@ async function loadInternalMarksForStudent(internalKey, department, registerNo, 
 </body>
 
 </html>
+
