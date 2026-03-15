@@ -371,8 +371,9 @@
     try{
       const sheet = SHEETS[internalKey];
       if (!sheet) throw new Error("Sheet config missing for " + internalKey);
-const url = `https://docs.google.com/spreadsheets/d/${sheet.id}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheet.name)}`;
+      const url = `https://docs.google.com/spreadsheets/d/${sheet.id}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheet.name)}`;
       const res = await fetch(url, { cache: "no-store" });
+      const text = await res.text();   // ⭐ FIX
       if(!res.ok){
         const preview = await res.text().then(t => t.slice(0,1000));
         console.error("Non-OK response fetching sheet:", res.status, preview);
