@@ -236,81 +236,92 @@
 
   // --- Hardcoded subject definitions (place after CONFIG) ---
   const deptSubjects = {
-    "AI & DS": [
-      { code: "23MA302", type: "Theory" },
-      { code: "23AD302", type: "Theory" },
-      { code: "23AD305", type: "Theory" },
-      { code: "23AD301", type: "Lab+Theory" },
-      { code: "23AD303", type: "Lab+Theory" },
-      { code: "23AD304", type: "Lab+Theory" },
-      { code: "23AD311", type: "Lab" },
-      { code: "23AD312", type: "Lab" }
-    ],
-    "CSE": [
-      { code: "23MA302", type: "Theory" },
-      { code: "23CS302", type: "Theory" },
-      { code: "23CS303", type: "Theory" },
-      { code: "23CS901", type: "Lab+Theory" },
-      { code: "23CS301", type: "Lab+Theory" },
-      { code: "23CS311", type: "Lab" },
-      { code: "23CS312", type: "Lab" }
-    ],
-    "IT": [
-      { code: "23MA302", type: "Theory" },
-      { code: "23CS302", type: "Theory" },
-      { code: "23CS303", type: "Theory" },
-      { code: "23CS901", type: "Lab+Theory" },
-      { code: "23IT301", type: "Lab+Theory" },
-      { code: "23CS311", type: "Lab" },
-      { code: "23CS312", type: "Lab" }
-    ],
-    "ECE": [
-      { code: "23MA303", type: "Theory" },
-      { code: "23AD306", type: "Theory" },
-      { code: "23EC301", type: "Theory" },
-      { code: "23EC303", type: "Theory" },
-      { code: "23GE902", type: "Theory" },
-      { code: "23EC302", type: "Lab+Theory" },
-      { code: "23AD313", type: "Lab" },
-      { code: "23EC311", type: "Lab" }
-    ],
-    "EEE": [
-      { code: "23MA901", type: "Theory" },
-      { code: "23EE301", type: "Theory" },
-      { code: "23EE302", type: "Theory" },
-      { code: "23EE303", type: "Theory" },
-      { code: "23EE304", type: "Theory" },
-      { code: "23CS304", type: "Lab+Theory" },
-      { code: "23EE311", type: "Lab" },
-      { code: "23EE312", type: "Lab" }
-    ],
-    "MECH": [
-      { code: "23MA301", type: "Theory" },
-      { code: "23ME301", type: "Theory" },
-      { code: "23ME303", type: "Theory" },
-      { code: "23GE902", type: "Theory" },
-      { code: "23ME302", type: "Lab+Theory" },
-      { code: "23ME311", type: "Lab" }
-    ],
-    "AI & ML": [
-      { code: "23MA302", type: "Theory" },
-      { code: "23CS302", type: "Theory" },
-      { code: "23CS303", type: "Theory" },
-      { code: "23CS901", type: "Lab+Theory" },
-      { code: "23CS301", type: "Lab+Theory" },
-      { code: "23CS311", type: "Lab" },
-      { code: "23CS312", type: "Lab" }
-    ],
-    "Civil": [
-      { code: "23MA301", type: "Theory" },
-      { code: "23CE301", type: "Theory" },
-      { code: "23CE302", type: "Theory" },
-      { code: "23CE303", type: "Theory" },
-      { code: "23CE304", type: "Theory" },
-      { code: "23CE311", type: "Lab" },
-      { code: "23CE312", type: "Lab" },
-      { code: "23CE313", type: "Lab" }
-    ]
+  "Civil": [
+    { code: "23CE401", type: "Theory" },
+    { code: "23CE402", type: "Theory" },
+    { code: "23CE403", type: "Theory" },
+    { code: "23CE404", type: "Theory" },
+    { code: "23CE405", type: "Theory" },
+    { code: "23GE901", type: "Theory" },
+    { code: "23CE411", type: "Lab" },
+    { code: "23CE412", type: "Lab" },
+    { code: "23CE413", type: "Lab" }
+  ],
+
+  "CSE": [
+    { code: "23CS401", type: "Lab+Theory" },
+    { code: "23CS402", type: "Theory" },
+    { code: "23CS403", type: "Lab+Theory" },
+    { code: "23CS404", type: "Theory" },
+    { code: "23CS405", type: "Theory" },
+    { code: "23CS406", type: "Theory" },
+    { code: "23CS411", type: "Lab" },
+    { code: "23CS412", type: "Lab" }
+  ],
+
+  "IT": [
+    { code: "23CS401", type: "Lab+Theory" },
+    { code: "23CS402", type: "Theory" },
+    { code: "23IT401", type: "Lab+Theory" },
+    { code: "23CS404", type: "Theory" },
+    { code: "23CS405", type: "Theory" },
+    { code: "23EC406", type: "Theory" },
+    { code: "23CS411", type: "Lab" },
+    { code: "23CS412", type: "Lab" }
+  ],
+
+  "ECE": [
+    { code: "23CS401", type: "Lab+Theory" },
+    { code: "23EC401", type: "Theory" },
+    { code: "23EC402", type: "Theory" },
+    { code: "23EC403", type: "Theory" },
+    { code: "23EC404", type: "Lab+Theory" },
+    { code: "23EC405", type: "Theory" },
+    { code: "23EC411", type: "Lab" },
+    { code: "23EC412", type: "Lab" }
+  ],
+
+  "EEE": [
+    { code: "23GE901", type: "Theory" },
+    { code: "23EE401", type: "Theory" },
+    { code: "23EE402", type: "Theory" },
+    { code: "23EE403", type: "Lab+Theory" },
+    { code: "23EE404", type: "Theory" },
+    { code: "23EE405", type: "Theory" },
+    { code: "23EE411", type: "Lab" },
+    { code: "23EE412", type: "Lab" }
+  ],
+
+  "MECH": [
+    { code: "23ME401", type: "Theory" },
+    { code: "23ME402", type: "Theory" },
+    { code: "23ME403", type: "Lab+Theory" },
+    { code: "23ME404", type: "Lab+Theory" },
+    { code: "23GE901", type: "Theory" },
+    { code: "23ME411", type: "Lab" },
+    { code: "23ME412", type: "Lab" }
+  ],
+
+  "AI & ML": [
+    { code: "23AL401", type: "Theory" },
+    { code: "23AL402", type: "Theory" },
+    { code: "23AL403", type: "Theory" },
+    { code: "23CS403", type: "Lab+Theory" },
+    { code: "23CS404", type: "Theory" },
+    { code: "23CS405", type: "Theory" },
+    { code: "23AL411", type: "Lab" },
+    { code: "23AL412", type: "Lab" }
+  ],
+
+  "AI & DS": [
+    { code: "23MA401", type: "Theory" },
+    { code: "23AD401", type: "Lab+Theory" },
+    { code: "23AD402", type: "Lab+Theory" },
+    { code: "23CS906", type: "Lab+Theory" },
+    { code: "23AD404", type: "Theory" },
+    { code: "23CS905", type: "Lab+Theory" },
+    { code: "23GE901", type: "Theory" }
+  ]
   };
   const maxMap = { "Theory": 8, "Lab+Theory": 10, "Lab": 10 };
 
