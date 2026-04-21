@@ -1049,19 +1049,18 @@ async function loadCombinedInternalMarks(department, registerNo) {
     // fetch internal marks ONLY if dept and register provided
 if (roll && deptVal) {
   loadInternalMarksForStudent(activeInternal, deptVal, roll, studentTotal)
-    .catch(err=>{
+    .catch(err => {
       console.error("Internal marks load failed:", err);
       showStatus("Error loading internal marks.", "error");
     });
 
-  // ✅ ALWAYS CALL THIS
   loadCombinedInternalMarks(deptVal, roll);
-};
-    } else {
-      internalMarksContainer.classList.add("hidden");
-      internalMarksNote.textContent = "To view internal marks, select Department and enter Register No.";
-    }
-  }
+
+} else {
+  internalMarksContainer.classList.add("hidden");
+  internalMarksNote.textContent = "To view internal marks, select Department and enter Register No.";
+}
+
 
   internalSelect.addEventListener("change", async function(){
     activeInternal = internalSelect.value || "IP1";
