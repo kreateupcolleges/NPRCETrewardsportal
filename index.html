@@ -689,7 +689,16 @@ async function loadInternalMarksForStudent(internalKey, department, registerNo, 
           continue;
         }
         const rpCol = findRPColumnFor(headerKey);
-        const marksVal = (studentRow[headerKey] === 0 || studentRow[headerKey] === "0") ? 0 : Number(studentRow[headerKey]) || 0;
+        let rawMarks = Number(studentRow[headerKey]) || 0;
+
+const typeKey = (sub.type === "Lab+Theory" || sub.type === "Lab + Theory")
+  ? "Lab + Theory"
+  : sub.type;
+
+const maxAllowed = maxMap[typeKey] || 10;
+
+// ✅ FIX: convert raw → internal marks
+let marksVal = Math.min(rawMarks, maxAllowed);
         const rpVal = rpCol ? (Number(studentRow[rpCol]) || 0) : 0;
         const type = (sub.type === "Lab+Theory" || sub.type === "Lab + Theory") ? "Lab + Theory" : (sub.type === "Lab" ? "Lab" : "Theory");
         const fixedMax = maxMap[type] !== undefined ? maxMap[type] : marksVal;
@@ -785,6 +794,7 @@ async function loadInternalMarksForStudent(internalKey, department, registerNo, 
         <td class="px-4 py-3 text-center">${finalTotalMax}</td>
       </tr>
     `;
+
 
     // summary keys (loose)
     let allocatedKey = cols.find(c => normalizeLabel(c).includes("allocated") && normalizeLabel(c).includes("rp"));
