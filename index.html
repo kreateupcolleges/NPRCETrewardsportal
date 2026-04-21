@@ -902,7 +902,7 @@ async function loadInternalMarksForStudent(internalKey, department, registerNo, 
 
   (async function init(){
     internalSelect.value = CONFIG.defaultInternal || "IP2";
-    activeInternal = internalSelect.value || "IP2";
+    activeInternal = internalSelect.value || "IP1";
     pageSize = Number(pageSizeSelect.value) || 10;
     const ok = await loadSheet(activeInternal);
     setFiltersEnabled(ok);
