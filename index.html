@@ -893,7 +893,10 @@ async function loadCombinedInternalMarks(department, registerNo) {
       <td>${totalMax}</td>
     </tr>
   `;
-
+document.getElementById("combinedTotalMarks").textContent = totalMarks;
+document.getElementById("combinedTotalRP").textContent = totalRP;
+document.getElementById("combinedTotalMax").textContent = totalMax;
+document.getElementById("combinedFinal").textContent = `${totalMarks} / ${totalMax}`;
   container.classList.remove("hidden");
 }
 async function getInternalSubjects(internalKey, department, registerNo) {
