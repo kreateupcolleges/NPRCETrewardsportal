@@ -814,143 +814,133 @@ async function loadCombinedInternalMarks(department, registerNo) {
   const tbody = document.getElementById("combinedTbody");
   const tfoot = document.getElementById("combinedTfoot");
 
-  const totalMarksEl = document.getElementById("combinedTotalMarks");
-  const totalRPEl = document.getElementById("combinedTotalRP");
-  const totalMaxEl = document.getElementById("combinedTotalMax");
-  const finalEl = document.getElementById("combinedFinal");
-
   container.classList.add("hidden");
 
-  try {
-    // fetch BOTH internals
-    const [ip1, ip2] = await Promise.all([
-      fetchInternalData("IP1", department, registerNo),
-      fetchInternalData("IP2", department, registerNo)
-    ]);
+  const ip1 = await getInternalSubjects("IP1", department, registerNo);
+  const ip2 = await getInternalSubjects("IP2", department, registerNo);
 
-    if (!ip1 || !ip2) {
-      container.classList.remove("hidden");
-      tbody.innerHTML = `<tr><td colspan="6">No combined data available</td></tr>`;
-      return;
-    }
-
-    const combinedSubjects = [];
-
-    // merge by subject code
-    const map = new Map();
-
-    [...ip1.subjects, ...ip2.subjects].forEach(s => {
-      if (!map.has(s.code)) {
-        map.set(s.code, { ...s });
-      } else {
-        const existing = map.get(s.code);
-        existing.marks += s.marks;
-        existing.rp += s.rp;
-        existing.max += s.max;
-      }
-    });
-
-    map.forEach(v => combinedSubjects.push(v));
-
-    // totals
-    let totalMarks = 0;
-    let totalRP = 0;
-    let totalMax = 0;
-
-    let rows = "";
-    let sno = 1;
-
-    combinedSubjects.forEach(s => {
-      totalMarks += s.marks;
-      totalRP += s.rp;
-      totalMax += s.max;
-
-      rows += `
-        <tr class="border-t">
-          <td class="px-4 py-2">${sno++}</td>
-          <td class="px-4 py-2">${s.code}</td>
-          <td class="px-4 py-2">${s.type}</td>
-          <td class="px-4 py-2 text-center">${s.marks}</td>
-          <td class="px-4 py-2 text-center">${s.rp}</td>
-          <td class="px-4 py-2 text-center">${s.max}</td>
-        </tr>
-      `;
-    });
-
-    thead.innerHTML = `
-      <tr>
-        <th>S.No</th>
-        <th>Subject</th>
-        <th>Type</th>
-        <th>Marks</th>
-        <th>RP</th>
-        <th>Max</th>
-      </tr>
-    `;
-
-    tbody.innerHTML = rows;
-
-    tfoot.innerHTML = `
-      <tr class="bg-purple-700 text-white">
-        <td colspan="3">TOTAL</td>
-        <td>${totalMarks}</td>
-        <td>${totalRP}</td>
-        <td>${totalMax}</td>
-      </tr>
-    `;
-
-    totalMarksEl.textContent = totalMarks;
-    totalRPEl.textContent = totalRP;
-    totalMaxEl.textContent = totalMax;
-    finalEl.textContent = `${totalMarks} / ${totalMax}`;
-
+  if (!ip1.length && !ip2.length) {
+    tbody.innerHTML = `<tr><td colspan="6">No combined data</td></tr>`;
     container.classList.remove("hidden");
-
-  } catch (err) {
-    console.error("Combined error:", err);
+    return;
   }
+
+  const combined = [];
+  const subjectList = deptSubjects[department] || [];
+
+  subjectList.forEach(sub => {
+    const s1 = ip1.find(s => s.code === sub.code) || { marks: 0, rp: 0, max: 0 };
+    const s2 = ip2.find(s => s.code === sub.code) || { marks: 0, rp: 0, max: 0 };
+
+    combined.push({
+      code: sub.code,
+      type: sub.type === "Lab+Theory" ? "Lab + Theory" : sub.type,
+      marks: s1.marks + s2.marks,
+      rp: s1.rp + s2.rp,
+      max: s1.max + s2.max
+    });
+  });
+
+  let totalMarks = 0, totalRP = 0, totalMax = 0;
+  let rows = "";
+  let sno = 1;
+
+  combined.forEach(s => {
+    totalMarks += s.marks;
+    totalRP += s.rp;
+    totalMax += s.max;
+
+    rows += `
+      <tr class="border-t">
+        <td class="px-4 py-2">${sno++}</td>
+        <td class="px-4 py-2">${s.code}</td>
+        <td class="px-4 py-2">${s.type}</td>
+        <td class="px-4 py-2 text-center">${s.marks}</td>
+        <td class="px-4 py-2 text-center">${s.rp}</td>
+        <td class="px-4 py-2 text-center">${s.max}</td>
+      </tr>
+    `;
+  });
+
+  thead.innerHTML = `
+    <tr>
+      <th>S.No</th>
+      <th>Subject Code</th>
+      <th>Subject Type</th>
+      <th>Marks Allotted</th>
+      <th>Reward Points Allotted</th>
+      <th>Max Internal Mark</th>
+    </tr>
+  `;
+
+  tbody.innerHTML = rows;
+
+  tfoot.innerHTML = `
+    <tr class="bg-purple-700 text-white">
+      <td colspan="3">TOTAL</td>
+      <td>${totalMarks}</td>
+      <td>${totalRP}</td>
+      <td>${totalMax}</td>
+    </tr>
+  `;
+
+  container.classList.remove("hidden");
 }
-  async function fetchInternalData(internalKey, department, registerNo) {
+async function getInternalSubjects(internalKey, department, registerNo) {
   const mapping = CONFIG.INTERNAL_MARKS_SHEETS[internalKey];
   const deptSheet = mapping[department];
-  if (!deptSheet) return null;
+  if (!deptSheet) return [];
 
   const url = `https://docs.google.com/spreadsheets/d/${deptSheet.id}/gviz/tq?sheet=${encodeURIComponent(deptSheet.name)}`;
   const res = await fetch(url);
   const text = await res.text();
 
   const json = JSON.parse(text.substr(47).slice(0, -2));
-  const cols = json.table.cols.map(c => c.label);
+  const cols = json.table.cols.map(c => c.label?.trim() || "");
   const rows = json.table.rows;
 
+  // find register column
   const regIndex = cols.findIndex(c => c.toLowerCase().includes("reg"));
 
   const row = rows.find(r =>
     String(r.c[regIndex]?.v).toLowerCase() === registerNo.toLowerCase()
   );
 
-  if (!row) return null;
+  if (!row) return [];
 
   const subjects = [];
+  const subjectList = deptSubjects[department] || [];
 
-  cols.forEach((col, i) => {
-    if (!col || col.toLowerCase().includes("rp")) return;
+  function findRPColumn(code) {
+    return cols.find(c =>
+      c.toLowerCase().includes(code.toLowerCase()) &&
+      c.toLowerCase().includes("rp")
+    );
+  }
 
-    const marks = Number(row.c[i]?.v) || 0;
-    const rp = Number(row.c[i + 1]?.v) || 0;
+  subjectList.forEach(sub => {
+    const colIndex = cols.findIndex(c =>
+      c.toLowerCase() === sub.code.toLowerCase()
+    );
 
-    if (marks > 0 || rp > 0) {
-      subjects.push({
-        code: col,
-        type: "—",
-        marks,
-        rp,
-        max: marks
-      });
+    if (colIndex === -1) return;
+
+    const marks = Number(row.c[colIndex]?.v) || 0;
+
+    let rp = 0;
+    const rpCol = findRPColumn(sub.code);
+    if (rpCol) {
+      const rpIndex = cols.indexOf(rpCol);
+      rp = Number(row.c[rpIndex]?.v) || 0;
     }
+
+    const type = sub.type === "Lab+Theory" ? "Lab + Theory" : sub.type;
+    const max = maxMap[type] || marks;
+
+    subjects.push({ code: sub.code, type, marks, rp, max });
   });
 
-  return { subjects };
+  return subjects;
 }
   function searchStudent() {
     resultSection.classList.add("hidden");
